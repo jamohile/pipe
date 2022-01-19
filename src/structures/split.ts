@@ -1,4 +1,4 @@
-import { node } from "../core/node";
+import { node } from "../core/node/node";
 import { inputtable } from "../core/pipe";
 
 /**

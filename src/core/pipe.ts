@@ -1,4 +1,4 @@
-import type { node } from "./node";
+import type { node } from "./node/node";
 
 /**
  * A pipe is another primitive, but a common one.
