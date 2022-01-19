@@ -2,10 +2,12 @@
  * A node is the base primitive of a circuit.
  * Components interface with eachother by being connected at their nodes.
  */
-class node {
-    private connections: Set<node> = new Set();
+export class node {
+  /** A list of other nodes this node is connected to. */
+  private connections: Set<node> = new Set();
 
-    public connect(n: node) {
-        this.connections.add(n);
-    }
+  /** Connect to another node. */
+  public connect(n: node) {
+    this.connections.add(n);
+  }
 }
