@@ -1,5 +1,5 @@
 import { make_pipe, pipe } from "../../core/pipe";
-import { series } from "../series";
+import { series } from "../series/series";
 
 /** Connect the given devices in series, but looped around to the start.
  *  We pass in a function here, to allow passing in an exit node.

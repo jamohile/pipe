@@ -1,4 +1,4 @@
-import { inputtable, isPipe, make_pipe, outputtable, pipe } from "../core/pipe";
+import { inputtable, isPipe, make_pipe, outputtable, pipe } from "../../core/pipe";
 
 /**
  * Connect these devices in series.
@@ -6,25 +6,23 @@ import { inputtable, isPipe, make_pipe, outputtable, pipe } from "../core/pipe";
  * This is because the first and last elements can start/terminate the series operation.
  */
 export function series<S extends SeriesStart, E extends SeriesEnd>(
-  first: S,
-  ...devices: [...pipe[], E]
+  ...devices: [S, ...pipe[], E]
 ): Series<S, E> {
-  const last = devices[devices.length - 1];
+  const first = devices[0] as S;
+  const last = devices[devices.length - 1] as E;
 
   let current: S | pipe | E = first;
 
-  for (const d of devices.slice(1, -1)) {
+  for (const d of devices.slice(1)) {
     // E only gets assigned at the end of the list.
-    (current as S | pipe).output.connect(d.input);
-    current = d;
+    (current as outputtable).output.connect((d as inputtable).input);
+    current = d as S | pipe | E;
   }
-
-  let output = {} as Series<S, E>;
 
   if (isPipe(first) && isPipe(last)) {
     return {
       input: first.input,
-      output: first.output,
+      output: last.output,
     } as Series<S, E>;
   }
 
@@ -56,7 +54,7 @@ type SeriesStart = outputtable | pipe;
 type SeriesEnd = inputtable | pipe;
 
 /** The nature of a series depends on the input and output. */
-type Series<S extends SeriesStart, E extends SeriesEnd> =
+export type Series<S extends SeriesStart, E extends SeriesEnd> =
   /** If both the start and end are pipes,
    *  Then the whole series acts like a pipe.
    */
