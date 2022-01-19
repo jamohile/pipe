@@ -1,5 +1,6 @@
 import { node } from "../../core/node/node";
 import { inputtable } from "../../core/pipe";
+import { connect } from "../connect/connect";
 
 /**
  * A split represents a point where a single node splits into multiple.
@@ -7,9 +8,5 @@ import { inputtable } from "../../core/pipe";
  */
 
 export function split(...devices: inputtable[]): node {
-  const n = new node();
-  for (const d of devices) {
-    n.connect(d.input);
-  }
-  return n;
+  return connect(...devices.map((d) => d.input));
 }
