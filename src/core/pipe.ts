@@ -8,7 +8,16 @@ import type { node } from "./node";
  *
  * Having this abstraction lets us interact with them in interesting ways.
  */
-export interface pipe {
+
+/** A device that can accept an input. */
+export interface inputtable {
   input: node;
+}
+
+/** A device that can accept an output. */
+export interface outputtable {
   output: node;
 }
+
+/** A pipe has both an input and an output. */
+export interface pipe extends inputtable, outputtable {}
