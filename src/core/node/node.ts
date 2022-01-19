@@ -9,10 +9,10 @@ export class node {
   /** Connect to another node.
    *  This is done bi-directionally.
    */
-  public connect(n: node) {
-    if (!this.connections.has(n)) {
-      this.connections.add(n);
-      n.connect(this);
+  public connect(n: node, { bidirectional = true } = {}) {
+    this.connections.add(n);
+    if (bidirectional) {
+      n.connect(this, { bidirectional: false });
     }
   }
 
