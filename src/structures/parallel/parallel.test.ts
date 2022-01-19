@@ -1,11 +1,11 @@
 import { node } from "../../core/node/node";
-import { pipe } from "../../core/pipe";
+import { make_pipe, pipe } from "../../core/pipe";
 import { parallel } from "./parallel";
 
 it("combines inputs and outputs for parallel nodes.", () => {
-  const a: pipe = { input: new node(), output: new node() };
-  const b: pipe = { input: new node(), output: new node() };
-  const c: pipe = { input: new node(), output: new node() };
+  const a = make_pipe();
+  const b = make_pipe();
+  const c = make_pipe();
 
   const p = parallel(a, b, c);
 

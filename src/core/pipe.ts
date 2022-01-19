@@ -1,4 +1,4 @@
-import type { node } from "./node/node";
+import { node } from "./node/node";
 
 /**
  * A pipe is another primitive, but a common one.
@@ -21,3 +21,8 @@ export interface outputtable {
 
 /** A pipe has both an input and an output. */
 export interface pipe extends inputtable, outputtable {}
+
+/** Make a barebones pipe. */
+export function make_pipe(): pipe {
+  return { input: new node(), output: new node() };
+}
