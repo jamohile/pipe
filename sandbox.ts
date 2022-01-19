@@ -1,8 +1,10 @@
 import { node } from "./src/core/node/node";
 import { make_pipe, pipe } from "./src/core/pipe";
+import { connect } from "./src/structures/connect/connect";
 import { loop } from "./src/structures/loop/loop";
 import { parallel } from "./src/structures/parallel/parallel";
 import { series } from "./src/structures/series/series";
+import { split } from "./src/structures/split/split";
 
 const rectifier = loop((out) => [
   make_pipe(),
@@ -21,7 +23,7 @@ function diode() {
 }
 
 function resistor() {
-    return make_pipe();
+  return make_pipe();
 }
 
 function bridge_rectifier(): { ac: pipe; dc: pipe } {
@@ -60,7 +62,7 @@ function bridge_rectifier_2(): { ac: pipe; dc: pipe } {
     },
     dc: {
       input: loop2.output,
-      output: loop2.output,
+      output: loop1.output,
     },
   };
 }
@@ -69,24 +71,50 @@ function bridge_rectifier_2(): { ac: pipe; dc: pipe } {
 // This DC signal is then connected to a cap and load resitor.
 
 // One implementation.
+const ground = new node();
 const rectifier1 = bridge_rectifier_2();
 
-loop(_ => [
-    make_pipe(),
-    rectifier1.ac
+loop([
+  // AC voltage source.
+  make_pipe(),
+  rectifier1.ac,
 ]);
-loop(_ => [
-    rectifier1.dc,
-    parallel(
-        // capacitor
-        make_pipe(),
-        // resistor
-        make_pipe()
-    )
+
+loop([
+  rectifier1.dc,
+  parallel(
+    // capacitor
+    make_pipe(),
+    // resistor
+    make_pipe()
+  ),
 ]);
 
 // Boom! That's our circuit. Not bad....
 // These are technically independent of eachother joined by the rectifier, is it at all possible to combine into a single call?
 // Even if not....I kind of like this representation.
 
-console.log(loop);
+// We can perhaps make it a bit more formal through this.
+
+const circuit = connect(
+  ground,
+  loop([
+    // AC voltage source.
+    make_pipe(),
+    rectifier1.ac,
+  ]),
+  loop([
+    rectifier1.dc,
+    parallel(
+      // capacitor
+      make_pipe(),
+      // resistor
+      make_pipe()
+    ),
+  ])
+);
+
+// INTERPRETATION:
+// Create a circuit by connecting ground to two subcircuit nodes.
+// For the first, connect an AC voltage source in a loop with a rectifier (AC arm)
+// For the second, connect that rectifier's RC arm to a cap and res in parallel.
