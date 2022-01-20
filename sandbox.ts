@@ -124,24 +124,16 @@ const circuit = connect(
 
 // This is a really cool expression of the bridge rectifier!
 
-function bridge_rectifier_3(): { ac: pipe; dc: pipe } {
+type rectifier = {ac: pipe, dc: pipe};
+
+function bridge_rectifier_3(): rectifier {
     const bridge = resistor();
 
-    const ac_plus = make_pipe();
-    const ac_minus = make_pipe();
+    const ac = make_pipe();
+    const dc = make_pipe();
   
-    const loop1 = loop((dc_plus) => [diode(), dc_plus, bridge, diode()]);
-    const loop2 = loop((dc_minus) => [diode(), dc_minus, bridge, diode()]);
-
-    const ac: pipe = {
-        input: loop1.input,
-        output: loop2.input
-    };
-
-    const dc: pipe = {
-        input: loop2.output,
-        output: loop1.input
-    };
+    const top_loop = loop([ac.input.to_pipe(), diode(), dc.output.to_pipe(), bridge, diode()]);
+    const bottom_loop = loop([ac.output.to_pipe(), diode(), dc.input.to_pipe(), bridge, diode()]);
   
     return {ac, dc};
   }
