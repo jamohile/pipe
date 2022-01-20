@@ -1,3 +1,4 @@
+![](https://user-images.githubusercontent.com/17712692/150270109-e301c01f-00e0-4ceb-8127-cb643e43a0fd.png)
 # Pipe
 
 (TODO: expand on this, this is just a basic idea.)
