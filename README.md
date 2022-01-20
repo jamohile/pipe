@@ -1,4 +1,4 @@
-# Pipe: Circuit Descriptor Language
+# Pipe
 
 (TODO: expand on this, this is just a basic idea.)
 
