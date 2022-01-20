@@ -1,3 +1,5 @@
+import { pipe } from "../pipe";
+
 /**
  * A node is the base primitive of a circuit.
  * Components interface with eachother by being connected at their nodes.
@@ -19,5 +21,12 @@ export class node {
   /** Get all connected nodes. */
   public get_connections(): node[] {
     return [...this.connections.values()];
+  }
+
+  public to_pipe(): pipe {
+    return {
+      input: this,
+      output: this
+    }
   }
 }

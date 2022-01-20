@@ -98,11 +98,13 @@ loop([
 
 const circuit = connect(
   ground,
+  // AC loop.
   loop([
     // AC voltage source.
     make_pipe(),
     rectifier1.ac,
   ]),
+  // DC loop.
   loop([
     rectifier1.dc,
     parallel(
@@ -118,3 +120,28 @@ const circuit = connect(
 // Create a circuit by connecting ground to two subcircuit nodes.
 // For the first, connect an AC voltage source in a loop with a rectifier (AC arm)
 // For the second, connect that rectifier's RC arm to a cap and res in parallel.
+
+
+// This is a really cool expression of the bridge rectifier!
+
+function bridge_rectifier_3(): { ac: pipe; dc: pipe } {
+    const bridge = resistor();
+
+    const ac_plus = make_pipe();
+    const ac_minus = make_pipe();
+  
+    const loop1 = loop((dc_plus) => [diode(), dc_plus, bridge, diode()]);
+    const loop2 = loop((dc_minus) => [diode(), dc_minus, bridge, diode()]);
+
+    const ac: pipe = {
+        input: loop1.input,
+        output: loop2.input
+    };
+
+    const dc: pipe = {
+        input: loop2.output,
+        output: loop1.input
+    };
+  
+    return {ac, dc};
+  }
