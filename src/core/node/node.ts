@@ -23,6 +23,11 @@ export class node {
     return [...this.connections.values()];
   }
 
+  /**
+   * Get the pipe-equivalent of this node.
+   * This is just a pipe with the same input and output.
+   * This allows us to insert nodes into circuits - essentially as 'probes'.
+   */
   public to_pipe(): pipe {
     return {
       input: this,
